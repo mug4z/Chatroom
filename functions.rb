@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # accepted connection
 def run
    loop{
@@ -17,6 +18,14 @@ def run
       end
    }.join
 end
+
+# Command /list
+def list_username(username, message)
+    if message == "/list"
+          @connected_clients[username].puts @connected_clients.collect {|list_name| [list_name[0]]}
+    end
+end
+
 
 # Goodbye
 def bye_user(message, username)
