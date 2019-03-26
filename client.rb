@@ -1,16 +1,12 @@
 require "socket"
-
 class Client
-
    def initialize(socket)
       @socket = socket
       @request_object = send_request
       @response_object = listen_response
-
       @request_object.join # will send the request to server
       @response_object.join # will receive response from server
    end
-
    def send_request
       puts "Please enter your username to establish a connection..."
       begin
@@ -26,7 +22,6 @@ class Client
          @socket.close
       end
    end
-
    def listen_response
       begin
          Thread.new do
@@ -44,10 +39,6 @@ class Client
          @socket.close
       end
    end
-
 end
-
-
-
 socket = TCPSocket.open( "localhost", 8080 )
 Client.new( socket )
