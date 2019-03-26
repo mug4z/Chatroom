@@ -44,8 +44,5 @@ class Client
       end
    end
 end
-
-
-
 socket = TCPSocket.open( "localhost", 8080 )
 Client.new( socket )
