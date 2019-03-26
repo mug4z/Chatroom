@@ -1,5 +1,7 @@
 require "socket"
+
 class Client
+
    def initialize(socket)
       @socket = socket
       @request_object = send_request
@@ -23,7 +25,6 @@ class Client
          # e.backtrace
          @socket.close
       end
-
    end
 
    def listen_response
@@ -43,6 +44,7 @@ class Client
          @socket.close
       end
    end
+
 end
 
 
