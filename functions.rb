@@ -1,6 +1,4 @@
-def chat_command
-  puts
-end
+# accepted connection
 def run
    loop{
       client_connection = @server_socket.accept
@@ -18,4 +16,12 @@ def run
 
       end
    }.join
+end
+
+# Goodbye
+def bye_user(message, username)
+  if message == "/bye"
+   puts "#{username} Goodbye friend !"
+   @connected_clients[username].puts "quit"
+  end
 end
