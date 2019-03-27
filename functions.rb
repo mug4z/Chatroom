@@ -28,9 +28,12 @@ end
 
 # Command /nick
 def change_username(username, message)
-  if message =~ (/\/nick/)
-    if @connected_clients[username] != message
-      @connected_clients[username].puts "Cette utilisateur existe déjà!"
+  if message =~ (/\A\/nick\s\w{3,10}/)
+    new_username = message.split(' ')[1]
+    if @connected_clients[new_username]
+      @connected_clients[username].puts "Cet utilisateur existe déjà. Veuillez choisir un pseudonyme inexistant."
+    else
+      @connected_clients[username].puts "Félicitations, votre nouveau pseudonyme est : #{username}"
     end
   end
 end
