@@ -3,8 +3,8 @@ require 'socket'
 require './functions'
 
 class Server
-  def initialize(socket_address,socket_port)
-    @server_socket = TCPServer.open(socket_address,socket_port)
+  def initialize(socket_port, socket_address)
+    @server_socket = TCPServer.open(socket_port, socket_address)
     @connected_clients = Hash.new
     puts 'Started server.........'
     run
@@ -14,8 +14,6 @@ class Server
     loop do
          message = connection.gets.chomp
          bye_user(message, username)
-         list_username(username, message)
-         change_username(username, message)
          puts @connected_clients
          (@connected_clients).keys.each do |client|
             @connected_clients[client].puts "#{username} : #{message}"
