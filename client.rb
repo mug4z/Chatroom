@@ -11,6 +11,19 @@ class Client
    end
 
    def send_request
+      wrong_password = 0
+      begin
+         puts "Please enter the password..."
+         password = gets.chomp
+         if password == "Pa$$w0rd"
+            break
+         end
+         wrong_password +=1
+      end while(wrong_password < 3)
+
+      if wrong_password == 3
+         exit
+      end
       puts "Please enter your username to establish a connection..."
       begin
          Thread.new do
