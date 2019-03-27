@@ -15,6 +15,7 @@ class Server
          message = connection.gets.chomp
          bye_user(message, username)
          list_username(username, message)
+         change_username(username, message)
          puts @connected_clients
          (@connected_clients).keys.each do |client|
             @connected_clients[client].puts "#{username} : #{message}"

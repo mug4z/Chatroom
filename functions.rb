@@ -26,6 +26,14 @@ def list_username(username, message)
     end
 end
 
+# Command /nick
+def change_username(username, message)
+  if message =~ (/\/nick/)
+    if @connected_clients[username] != message
+      @connected_clients[username].puts "Cette utilisateur existe déjà!"
+    end
+  end
+end
 
 # Goodbye
 def bye_user(message, username)
