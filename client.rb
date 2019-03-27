@@ -34,6 +34,7 @@ class Client
                puts "#{response}"
                if response.eql?'quit'
                   @socket.close
+                  exit
                end
             end
          end
