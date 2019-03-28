@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-#!/usr/bin/env ruby
-require 'socket'
-require './functions'
-=======
 #!/usr/bin/ruby
 require 'socket'                 # Get sockets from stdlib
->>>>>>> master
-
+require './functions'
 class Server
 
   def initialize( ip, port )
@@ -15,20 +9,6 @@ class Server
     run
   end
 
-<<<<<<< HEAD
-  def establish_chatting(username, connection)
-    loop do
-         message = connection.gets.chomp
-      if message == "/bye"
-         bye_user(message, username)
-      end
-         puts @connected_clients
-         (@connected_clients).keys.each do |client|
-            @connected_clients[client].puts "#{username} : #{message}"
-         end
-      end
-  end
-=======
   def run
     loop {
       Thread.start(@server.accept) do |client|
@@ -52,6 +32,14 @@ class Server
   def listen_user_messages( client, username )
     loop {
       message = client.gets.chomp
+      if message == "/bye"
+        bye_user( client, username )
+      elsif message == "/list"
+        list_user( client )
+      elsif message =~ (/\A\/nick\s\w{3,10}/)
+        change_user( client, username, message )
+        username = @connections_clients[client]
+      end
       puts @connections_clients
       @connections_clients.each do |other_client, other_name|
         unless other_name == username
@@ -61,7 +49,6 @@ class Server
     }
   end
 
->>>>>>> master
 end
 
 Server.new('localhost', 8080)
