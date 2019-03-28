@@ -34,5 +34,5 @@ class Client
 
 end
 
-connection = TCPSocket.open('localhost', 8080)
+connection = TCPSocket.open('172.17.102.141', 8080)
 Client.new( connection )

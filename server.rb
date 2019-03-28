@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -w
 
 require 'socket' # Sockets are in standard library
 require './functions' # Call command-lines
@@ -21,17 +21,18 @@ class Server
         client.puts "Please type the password of this chatroom."
         message = client.gets.chomp
         try = 0
-        until message == "intergouvernementalisations" || try == 2 do
-          client.puts "Please retry"
-          message = client.gets.chomp
+        until message == "intergouvernementalisations" || try == 3 do
+          if try < 2
+            client.puts "Please retry"
+            message = client.gets.chomp
+          else
+            client.puts "quit"
+          end
           try+=1
-        end
-        if try == 2
-          client.puts "quit"
         end
 
         # Create user
-        nick_name = "#{default_user}" + "#{i+=1}"
+        nick_name = "#{default_user}" + "#{number_user+=1}"
         puts "Connection : #{nick_name} => #{client}"
         @connections_clients[client] = nick_name
         client.print(Time.now.ctime)
@@ -69,4 +70,4 @@ class Server
 
 end
 
-Server.new('localhost', 8080)
+Server.new('172.17.102.141', 8080)
