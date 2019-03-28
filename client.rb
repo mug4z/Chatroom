@@ -1,50 +1,38 @@
-#!/usr/bin/env ruby
-require 'socket'
+#!/usr/bin/ruby -w
+require 'socket' # Sockets are in standard library
 
 class Client
-   def initialize(socket)
-      @socket = socket
-      @request_object = send_request
-      @response_object = listen_response
+  def initialize( connection )
+    @server = connection
+    @request = send
+    @receive = listen
+    @request.join # Send messages to server
+    @receive.join # Receive messages from server
+  end
 
-      @request_object.join # will send the request to server
-      @response_object.join # will receive response from server
-   end
+  def listen
+    Thread.new do
+      loop {
+        message = @server.gets.chomp
+        puts "#{message}"
+        if message == "quit"
+          @server.close
+          exit
+        end
+      }
+    end
+  end
 
-   def send_request
-      puts "Please enter your username to establish a connection..."
-      begin
-         Thread.new do
-            loop do
-               message = $stdin.gets.chomp
-               @socket.puts message
-            end
-         end
-      rescue IOError => e
-         puts e.message
-         # e.backtrace
-         @socket.close
-      end
-   end
+  def send
+    Thread.new do
+      loop {
+        message = $stdin.gets.chomp
+        @server.puts( message )
+      }
+    end
+  end
 
-   def listen_response
-      begin
-         Thread.new do
-            loop do
-               response = @socket.gets.chomp
-               puts "#{response}"
-               if response.eql?'quit'
-                  @socket.close
-                  exit
-               end
-            end
-         end
-      rescue IOError => e
-         puts e.message
-         # e.backtrace
-         @socket.close
-      end
-   end
 end
-socket = TCPSocket.open( "localhost", 8080 )
-Client.new( socket )
+
+connection = TCPSocket.open('localhost', 8080)
+Client.new( connection )
