@@ -1,30 +1,36 @@
 #!/usr/bin/ruby
-require 'socket'                 # Get sockets from stdlib
-require './functions'
+
+require 'socket' # Sockets are in standard library
+require './functions' # Call command-lines
+
 class Server
 
   def initialize( ip, port )
     @server = TCPServer.open( ip, port )
     @connections_clients = Hash.new
-    run
+    session
   end
 
-  def run
+  def session # Start session for a user
     default_user = "User"
-    i = 0
+    number_user = 0
     loop {
       Thread.start(@server.accept) do |client|
+
+        # Confirm the chatroom password
         client.puts "Please type the password of this chatroom."
         message = client.gets.chomp
-        n = 0
-        until message == "1234" || n == 2 do
+        try = 0
+        until message == "intergouvernementalisations" || try == 2 do
           client.puts "Please retry"
           message = client.gets.chomp
-          n+=1
+          try+=1
         end
-        if n == 2
+        if try == 2
           client.puts "quit"
         end
+
+        # Create user
         nick_name = "#{default_user}" + "#{i+=1}"
         puts "Connection : #{nick_name} => #{client}"
         @connections_clients[client] = nick_name
@@ -35,9 +41,11 @@ class Server
     }.join
   end
 
-  def listen_user_messages( client, username )
+  def listen_user_messages( client, username ) # Receive messages from users
     loop {
       message = client.gets.chomp
+
+      # Check command-lines
       if message == "/bye"
         bye_user( client, username )
       elsif message == "/list"
@@ -46,6 +54,8 @@ class Server
         change_user( client, username, message )
         username = @connections_clients[client]
       end
+
+      # Send messages to users
       puts @connections_clients
       @connections_clients.each do |other_client, other_name|
         unless other_name == username || message =~ (/\A\/nick\s\w{3,10}/)
