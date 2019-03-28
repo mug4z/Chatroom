@@ -10,7 +10,7 @@ class Client
     @receive.join # Receive messages from server
   end
 
-  def listen
+  def listen # Receive messages from server
     Thread.new do
       loop {
         message = @server.gets.chomp
@@ -23,7 +23,7 @@ class Client
     end
   end
 
-  def send
+  def send # Send messaqges to server
     Thread.new do
       loop {
         message = $stdin.gets.chomp
