@@ -10,20 +10,26 @@ class Server
   end
 
   def run
+    default_user = "User"
+    i = 0
     loop {
       Thread.start(@server.accept) do |client|
-        nick_name = client.gets.chomp
-        @connections_clients.each do |other_client, other_name|
-          if client == other_client || nick_name == other_name
-            client.puts "This username already exist"
-            Thread.kill self
-          end
+        client.puts "Please type the password of this chatroom."
+        message = client.gets.chomp
+        n = 0
+        until message == "1234" || n == 2 do
+          client.puts "Please retry"
+          message = client.gets.chomp
+          n+=1
         end
+        if n == 2
+          client.puts "quit"
+        end
+        nick_name = "#{default_user}" + "#{i+=1}"
         puts "Connection : #{nick_name} => #{client}"
         @connections_clients[client] = nick_name
         client.print(Time.now.ctime)
-        client.puts " : Connection established! Happy chatting!"
-        #client.close                  # Disconnect from the client
+        client.puts " : Connection established! Happy chatting #{nick_name}!\nType /help to see all command-lines."
         listen_user_messages( client, nick_name )
       end
     }.join
@@ -42,7 +48,7 @@ class Server
       end
       puts @connections_clients
       @connections_clients.each do |other_client, other_name|
-        unless other_name == username
+        unless other_name == username || message =~ (/\A\/nick\s\w{3,10}/)
           other_client.puts "#{username}: #{message}"
         end
       end

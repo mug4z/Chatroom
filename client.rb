@@ -24,7 +24,6 @@ class Client
   end
 
   def send
-    puts "Please enter your username to establish a connection :"
     Thread.new do
       loop {
         message = $stdin.gets.chomp
