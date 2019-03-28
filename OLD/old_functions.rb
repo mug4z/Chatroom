@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 # accepted connection
 def run
   default_user = "User"
@@ -17,6 +18,25 @@ def run
          establish_chatting(conn_name, conn) # allow chatting
       end
    }.join
+end
+
+# Command /list
+def list_username(username, message)
+    if message == "/list"
+          @connected_clients[username].puts @connected_clients.collect {|list_name| [list_name[0]]}
+    end
+end
+
+# Command /nick
+def change_username(username, message)
+  if message =~ (/\A\/nick\s\w{3,10}/)
+    new_username = message.split(' ')[1]
+    if @connected_clients[new_username]
+      @connected_clients[username].puts "Cet utilisateur existe déjà. Veuillez choisir un pseudonyme inexistant."
+    else
+      @connected_clients[username].puts "Félicitations, votre nouveau pseudonyme est : #{username}"
+    end
+  end
 end
 
 # Goodbye
