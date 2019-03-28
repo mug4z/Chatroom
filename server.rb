@@ -45,6 +45,8 @@ class Server
       elsif message =~ (/\A\/nick\s\w{3,10}/)
         change_user( client, username, message )
         username = @connections_clients[client]
+      elsif message == "/help"
+        client.puts "/bye : quit the server\n/list : list all user connected\n/nick your_username : choose your username"
       end
       puts @connections_clients
       @connections_clients.each do |other_client, other_name|
